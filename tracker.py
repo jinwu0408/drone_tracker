@@ -18,7 +18,7 @@ from utils.torch_utils import select_device, load_classifier, time_synchronized
 
 def detect():
     # source, weights, view_img, save_txt, imgsz = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size
-    source='2'
+    source='0'
     weights = 'best.pt'
     imgsz=640
     conf_thres=0.25
