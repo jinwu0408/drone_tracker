@@ -5,6 +5,7 @@ from collections import defaultdict
 from enum import Enum
 import cv2
 import numpy as np
+from streaming_example import *
 # import matplotlib.pyplot as plt
 
 
@@ -25,9 +26,9 @@ class Ctrl(Enum):
         BREAK_LOOP,
         WAIT,
         CHECK,
-        Streaming_START
-        Streaming_STOP
-        RECORDING_START
+        Streaming_START,
+        Streaming_STOP,
+        RECORDING_START,
         RECORDING_STOP
     ) = range(18)
 
@@ -47,9 +48,9 @@ QWERTY_CTRL_KEYS = {
     Ctrl.BREAK_LOOP: Key.enter,
     Ctrl.WAIT: Key.space,
     Ctrl.CHECK: "c",
-    Ctrl.Streaming_START:"1"
-    Ctrl.Streaming_STOP:"2"
-    Ctrl.RECORDING_START:"3"
+    Ctrl.Streaming_START:"1",
+    Ctrl.Streaming_STOP:"2",
+    Ctrl.RECORDING_START:"3",
     Ctrl.RECORDING_STOP:"4"
 }
 
@@ -187,6 +188,12 @@ class KeyboardCtrl(Listener):
     def landing(self):
         return self._rate_limit_cmd(Ctrl.LANDING, 2.0)
 
+    def start_streaming(self):
+        return self._rate_limit_cmd(Ctrl.Streaming_START, 2.0)
+
+    def stop_streaming(self):
+        return self._rate_limit_cmd(Ctrl.Streaming_STOP, 2.0)
+
     def break_loop(self):
         return self._rate_limit_cmd(Ctrl.BREAK_LOOP, 1.0)
 
@@ -207,11 +214,18 @@ if __name__ == "__main__":
         drone.connection()
         drone.start_piloting()
         control = KeyboardCtrl()
+        streaming_example = StreamingExample()
+
         while not control.quit():
             if control.takeoff():
                 drone(TakeOff())
             elif control.landing():
                 drone(Landing())
+            elif control.start_streaming():
+                print('starting streaming')
+                streaming_example.start()
+            elif control.stop_streaming():
+                streaming_example.stop()
             elif control.has_piloting_cmd() or control.wait():
                 if control.has_piloting_cmd():
                     ctrl_seq.append([control.roll(), control.pitch(), control.yaw(), control.throttle(), 0])  # 0 stands for not hover

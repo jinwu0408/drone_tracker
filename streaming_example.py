@@ -105,29 +105,29 @@ class StreamingExample(threading.Thread):
         """
 
         # Get a ctypes pointer and size for this h264 frame
-        frame_pointer, frame_size = h264_frame.as_ctypes_pointer()
-
-        # For this example we will just compute some basic video stream stats
-        # (bitrate and FPS) but we could choose to resend it over an another
-        # interface or to decode it with our preferred hardware decoder..
-
-        # Compute some stats and dump them in a csv file
-        info = h264_frame.info()
-        frame_ts = info["ntp_raw_timestamp"]
-        if not bool(info["h264"]["is_sync"]):
-            if len(self.h264_frame_stats) > 0:
-                while True:
-                    start_ts, _ = self.h264_frame_stats[0]
-                    if (start_ts + 1e6) < frame_ts:
-                        self.h264_frame_stats.pop(0)
-                    else:
-                        break
-            self.h264_frame_stats.append((frame_ts, frame_size))
-            h264_fps = len(self.h264_frame_stats)
-            h264_bitrate = (
-                8 * sum(map(lambda t: t[1], self.h264_frame_stats)))
-            self.h264_stats_writer.writerow(
-                {'fps': h264_fps, 'bitrate': h264_bitrate})
+        # frame_pointer, frame_size = h264_frame.as_ctypes_pointer()
+        #
+        # # For this example we will just compute some basic video stream stats
+        # # (bitrate and FPS) but we could choose to resend it over an another
+        # # interface or to decode it with our preferred hardware decoder..
+        #
+        # # Compute some stats and dump them in a csv file
+        # info = h264_frame.info()
+        # frame_ts = info["ntp_raw_timestamp"]
+        # if not bool(info["h264"]["is_sync"]):
+        #     if len(self.h264_frame_stats) > 0:
+        #         while True:
+        #             start_ts, _ = self.h264_frame_stats[0]
+        #             if (start_ts + 1e6) < frame_ts:
+        #                 self.h264_frame_stats.pop(0)
+        #             else:
+        #                 break
+        #     self.h264_frame_stats.append((frame_ts, frame_size))
+        #     h264_fps = len(self.h264_frame_stats)
+        #     h264_bitrate = (
+        #         8 * sum(map(lambda t: t[1], self.h264_frame_stats)))
+        #     self.h264_stats_writer.writerow(
+        #         {'fps': h264_fps, 'bitrate': h264_bitrate})
 
     def show_yuv_frame(self, window_name, yuv_frame):
         # the VideoFrame.info() dictionary contains some useful information
@@ -236,19 +236,19 @@ class StreamingExample(threading.Thread):
         #     check=True
         # )
 
-
-if __name__ == "__main__":
-    # pd = olympe.Pdraw()
-    # pd.play()
-
-
-
-    streaming_example = StreamingExample()
-    # Start the video stream
-    streaming_example.start()
-    # Perform some live video processing while the drone is flying
-    # streaming_example.fly()
-    # Stop the video stream
-    streaming_example.stop()
-    # Recorded video stream postprocessing
-    # streaming_example.postprocessing()
+#
+# if __name__ == "__main__":
+#     # pd = olympe.Pdraw()
+#     # pd.play()
+#
+#
+#
+#     streaming_example = StreamingExample()
+#     # Start the video stream
+#     streaming_example.start()
+#     # Perform some live video processing while the drone is flying
+#     # streaming_example.fly()
+#     # Stop the video stream
+#     streaming_example.stop()
+#     # Recorded video stream postprocessing
+#     # streaming_example.postprocessing()
