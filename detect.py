@@ -1,2 +1,2 @@
-def detect():
+def detect(frame):
     pass
